@@ -140,6 +140,8 @@
       function timer() {
           if (count <= 0) {
               clearInterval(counter);
+              alert('Time is up!');
+              $('.timeleft').text('0');
               return;
           }
           var current = Date.now();
