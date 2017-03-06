@@ -27,6 +27,35 @@
   	transform: scale(1.1);
   }
 
+
+  #clockdiv{
+  	font-family: sans-serif;
+  	color: #fff;
+  	display: inline-block;
+  	font-weight: 100;
+  	text-align: center;
+  	font-size: 30px;
+  }
+
+  #clockdiv > div{
+  	padding: 10px;
+  	border-radius: 3px;
+  	background: #00BF96;
+  	display: inline-block;
+  }
+
+  #clockdiv div > span{
+  	padding: 15px;
+  	border-radius: 3px;
+  	background: #00816A;
+  	display: inline-block;
+  }
+
+  .smalltext{
+  	padding-top: 5px;
+  	font-size: 16px;
+  }
+
     </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -41,6 +70,17 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12"><h1>Questions Prototype</h1></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div id="clockdiv">
+            <div>
+              <span class="timeleft"></span>
+              <div class="smalltext">Seconds Left</div>
+            </div>
+          </div>
+
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-12"><h3>Multiple Choice Question:</h3></div>
@@ -67,6 +107,55 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script>
+/*
+    $('#start').on('click', function () {
+        clearInterval(counter);
+        initialMillis = Date.now();
+        counter = setInterval(timer, 1);
+    });
+
+    $('#stop').on('click', function () {
+        clearInterval(counter);
+    });
+
+    $('#reset').on('click', function () {
+        clearInterval(counter);
+        count = initial;
+        displayCount(count);
+    });
+
+    displayCount(initial);
+    */
+    $(function(){
+      var initial = 60000;
+      var count = initial;
+      var counter; //10 will  run it every 100th of a second
+      var initialMillis;
+      initialMillis = Date.now();
+      counter = setInterval(timer, 1);
+      displayCount(initial);
+
+      function timer() {
+          if (count <= 0) {
+              clearInterval(counter);
+              return;
+          }
+          var current = Date.now();
+
+          count = count - (current - initialMillis);
+          initialMillis = current;
+          displayCount(count);
+      }
+
+      function displayCount(count) {
+          var res = count / 1000;
+          $('.timeleft').text(res.toPrecision(count.toString().length));
+      }
+
+    });
+    </script>
 
   </body>
 </html>
