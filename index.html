@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <style>
+
+    .container {
+      background-color:#FFD7C5;
+    }
     .question-choice {
       margin:10px;
       overflow:hidden;
@@ -28,32 +32,20 @@
   }
 
 
-  #clockdiv{
-  	font-family: sans-serif;
-  	color: #fff;
+  .timer{
+  	color: #000;
   	display: inline-block;
   	font-weight: 100;
   	text-align: center;
   	font-size: 30px;
   }
 
-  #clockdiv > div{
-  	padding: 10px;
-  	border-radius: 3px;
-  	background: #00BF96;
-  	display: inline-block;
-  }
-
-  #clockdiv div > span{
-  	padding: 15px;
-  	border-radius: 3px;
-  	background: #00816A;
-  	display: inline-block;
-  }
-
-  .smalltext{
-  	padding-top: 5px;
-  	font-size: 16px;
+  .timer span{
+    padding: 15px;
+    border-radius: 3px;
+    background: #fff;
+    display: inline-block;
+    border:1px solid #000;
   }
 
     </style>
@@ -73,12 +65,10 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <div id="clockdiv">
-            <div>
-              <span class="timeleft"></span>
-              <div class="smalltext">Seconds Left</div>
+            <div class="timer">
+              <span class="seconds"></span>
+              <span class="miliseconds"></span>
             </div>
-          </div>
 
         </div>
       </div>
@@ -101,6 +91,40 @@
           <a href="#" class="question-choice"><img src="https://unsplash.it/2000/2000/?random" class="img-responsive" /></a>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm-12"><h3>Multiple Choice Question:</h3></div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <p>Match the person name with her acheivement</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-xs-12 col-md-offset-3">
+          <div class="select-group">
+            <div class="select-item" data-value="c">
+
+            </div>
+            <div class="select-item" data-value="a">
+
+            </div>
+            <div class="select-item" data-value="b">
+
+            </div>
+          </div>
+          <div class="match-group">
+            <div class="match-item" data-match="a">
+
+            </div>
+            <div class="match-item" data-match="b">
+
+            </div>
+            <div class="match-item" data-match="c">
+
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -109,51 +133,34 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <script>
-/*
-    $('#start').on('click', function () {
-        clearInterval(counter);
-        initialMillis = Date.now();
-        counter = setInterval(timer, 1);
-    });
-
-    $('#stop').on('click', function () {
-        clearInterval(counter);
-    });
-
-    $('#reset').on('click', function () {
-        clearInterval(counter);
-        count = initial;
-        displayCount(count);
-    });
-
-    displayCount(initial);
-    */
     $(function(){
-      var initial = 60000;
-      var count = initial;
-      var counter; //10 will  run it every 100th of a second
-      var initialMillis;
-      initialMillis = Date.now();
-      counter = setInterval(timer, 1);
-      displayCount(initial);
+
+
+      var expires = new Date();
+
+      expires.setSeconds(expires.getSeconds() + 60); // set timer to 60 seconds
+      var counter = setInterval(timer, 1);
 
       function timer() {
-          if (count <= 0) {
+          var timeDiff = expires - new Date();
+
+          if (timeDiff <= 0) {
               clearInterval(counter);
-              alert('Time is up!');
-              $('.timeleft').text('0');
+              //document.getElementById("timer").innerHTML = "00:00";
+              $('.seconds').html('00');
+              $('.miliseconds').html('00');
               return;
           }
-          var current = Date.now();
 
-          count = count - (current - initialMillis);
-          initialMillis = current;
-          displayCount(count);
-      }
+          var seconds = new Date(timeDiff).getSeconds();
+          var milliSeconds = (new Date(timeDiff).getMilliseconds() / 10).toFixed(0);
 
-      function displayCount(count) {
-          var res = count / 1000;
-          $('.timeleft').text(res.toPrecision(count.toString().length));
+          var seconds = seconds < 10 ? "0" + seconds : seconds;
+          var milliSeconds = milliSeconds < 10 ? "0" + milliSeconds : milliSeconds;
+
+          //document.getElementById("timer").innerHTML = seconds + ":" + milliSeconds; // watch for spelling
+          $('.seconds').html(seconds);
+          $('.miliseconds').html(milliSeconds);
       }
 
     });
