@@ -56,14 +56,27 @@
 .select-group {
   padding:10px;
   display:block;
+  position: relative;
 }
 .select-item {
-  width:30%;
+  width:27%;
   margin:5px;
   float:left;
   display:inline-block;
+  position: absolute;
+  top:10px;
+}
+.select-item.first-item {
+  left:10px;
+}
+.select-item.second-item {
+  left:34%
+}
+.select-item.third-item {
+  right:10px;
 }
 .match-group {
+  margin-top:200px;
   padding:10px;
   display:block;
 }
@@ -75,6 +88,12 @@
   background-color:#F4E4DD;
   border: 3px solid #FFF;
   border-radius: 5px;s
+  display:inline-block;
+}
+.match-item .select-item {
+  position: static;
+  width:auto;
+  margin:0;
   display:inline-block;
 }
 .selectable, .matchable {
@@ -139,13 +158,13 @@
         <div class="col-md-6 col-xs-12 col-md-offset-3">
           <div class="matching-cards">
             <div class="select-group">
-              <div class="select-item" data-value="c">
+              <div class="select-item first-item" data-value="c">
                 <img src="https://unsplash.it/200/200/?random" class="img-responsive" />
               </div>
-              <div class="select-item" data-value="a">
+              <div class="select-item second-item" data-value="a">
                 <img src="https://unsplash.it/200/200/?random" class="img-responsive" />
               </div>
-              <div class="select-item" data-value="b">
+              <div class="select-item third-item" data-value="b">
                 <img src="https://unsplash.it/200/200/?random" class="img-responsive" />
               </div>
             </div>
@@ -237,8 +256,8 @@
         e.preventDefault();
         if ( $(this).hasClass('matchable') && !$(this).hasClass('matched')){
           var selectedItem = $('.select-item.selected');
+          $(selectedItem).removeClass('selected');
           selectedItem.animateAppendTo($(this),1000);
-          selectedItem.removeClass('selected');
           $('.select-group .select-item').addClass('selectable');
           $('.match-item').removeClass('matchable');
           $(this).addClass('matched');
@@ -250,7 +269,7 @@
               newEle = $this.clone(true).appendTo(sel),
               newPos = newEle.position();
           newEle.hide();
-          $this.css('position', 'absolute').animate(newPos, speed, function() {
+          $this.animate(newPos, speed, function() {
               newEle.show();
               $this.remove();
           });
