@@ -46,7 +46,43 @@
     background: #fff;
     display: inline-block;
     border:1px solid #000;
+    width:66px;
   }
+
+.matching-cards{
+  position: relative;
+}
+
+.select-group {
+  padding:10px;
+  display:block;
+}
+.select-item {
+  width:30%;
+  margin:5px;
+  float:left;
+  display:inline-block;
+}
+.match-group {
+  padding:10px;
+  display:block;
+}
+.match-item {
+  width:30%;
+  margin:5px;
+  height:200px;
+  float:left;
+  background-color:#F4E4DD;
+  border: 3px solid #FFF;
+  border-radius: 5px;s
+  display:inline-block;
+}
+.selectable, .matchable {
+  cursor: pointer;
+}
+.select-item.selected {
+  border:3px solid red;
+}
 
     </style>
 
@@ -101,31 +137,53 @@
       </div>
       <div class="row">
         <div class="col-md-6 col-xs-12 col-md-offset-3">
-          <div class="select-group">
-            <div class="select-item" data-value="c">
-
+          <div class="matching-cards">
+            <div class="select-group">
+              <div class="select-item" data-value="c">
+                <img src="https://unsplash.it/200/200/?random" class="img-responsive" />
+              </div>
+              <div class="select-item" data-value="a">
+                <img src="https://unsplash.it/200/200/?random" class="img-responsive" />
+              </div>
+              <div class="select-item" data-value="b">
+                <img src="https://unsplash.it/200/200/?random" class="img-responsive" />
+              </div>
             </div>
-            <div class="select-item" data-value="a">
+            <div class="clearfix"></div>
+            <div class="match-group">
+              <div class="match-item" data-match="a">
 
-            </div>
-            <div class="select-item" data-value="b">
+              </div>
+              <div class="match-item" data-match="b">
 
-            </div>
-          </div>
-          <div class="match-group">
-            <div class="match-item" data-match="a">
+              </div>
+              <div class="match-item" data-match="c">
 
-            </div>
-            <div class="match-item" data-match="b">
-
-            </div>
-            <div class="match-item" data-match="c">
-
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+
+
+    <div class="modal fade" id="timer-ended-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Timer ended</h4>
+          </div>
+          <div class="modal-body">
+            <p>Time is up!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -149,6 +207,7 @@
               //document.getElementById("timer").innerHTML = "00:00";
               $('.seconds').html('00');
               $('.miliseconds').html('00');
+              $('#timer-ended-modal').modal('show');
               return;
           }
 
@@ -163,7 +222,45 @@
           $('.miliseconds').html(milliSeconds);
       }
 
+      // Matching card js
+      $('.select-item').addClass('selectable');
+      $('.match-item').removeClass('matchable');
+      $('.selectable').on('click',function(e){
+        e.preventDefault();
+        if ( $(this).hasClass('selectable') && !$(this).hasClass('selected')){
+          $(this).addClass('selected');
+          $('.select-item').removeClass('selectable');
+          $('.match-item').addClass('matchable');
+        }
+      });
+      $('.match-group').on('click','.matchable',function(e){
+        e.preventDefault();
+        if ( $(this).hasClass('matchable') && !$(this).hasClass('matched')){
+          var selectedItem = $('.select-item.selected');
+          selectedItem.animateAppendTo($(this),1000);
+          selectedItem.removeClass('selected');
+          $('.select-group .select-item').addClass('selectable');
+          $('.match-item').removeClass('matchable');
+          $(this).addClass('matched');
+        }
+      });
+
+      $.fn.animateAppendTo = function(sel, speed) {
+          var $this = this,
+              newEle = $this.clone(true).appendTo(sel),
+              newPos = newEle.position();
+          newEle.hide();
+          $this.css('position', 'absolute').animate(newPos, speed, function() {
+              newEle.show();
+              $this.remove();
+          });
+          return newEle;
+      };
+
+
     });
+
+
     </script>
 
   </body>
