@@ -358,6 +358,12 @@
           $(this).addClass('matched');
         }
       });
+      $('.match-group').on('click','.match-item .select-item', function(e){
+        e.preventDefault();
+        var matchedItem = $(this);
+        $(this).parent().removeClass('matched');
+        $(this).appendTo('.select-group');
+      })
 
       $.fn.animateAppendTo = function(sel, speed) {
           var $this = this,
