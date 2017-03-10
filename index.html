@@ -330,7 +330,7 @@
 
       $('.circle').on('click',function(e){
         e.preventDefault();
-        $('.circle').removeClass('fill');
+        $('.circle .fill').removeClass('fill');
         $('.circle svg').hide();
         $('> div', this).addClass('fill');
         $('svg', this).show();
