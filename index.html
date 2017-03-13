@@ -14,21 +14,31 @@
 
     .container {
       background-color:#FFD7C5;
-    }
+    }/*
     .question-choice {
       margin:10px;
       overflow:hidden;
+    }*/
+
+    .multiple-choice-question.selected img {
+      border:3px solid red;
     }
 
-  .question-choice img {
+  .multiple-choice-question img {
   	-webkit-transform: scale(1);
   	transform: scale(1);
   	-webkit-transition: .3s ease-in-out;
   	transition: .3s ease-in-out;
   }
-  .question-choice:hover img {
+  .multiple-choice-question:hover img {
   	-webkit-transform: scale(1.1);
   	transform: scale(1.1);
+  }
+
+  .card {
+    width:150px;
+    height:150px;
+    cursor: pointer;
   }
 
 
@@ -178,18 +188,51 @@
       </div>
       <div class="row">
         <div class="col-xs-6 col-md-3">
-          <a href="#" class="question-choice"><img src="https://unsplash.it/2000/2000/?random" class="img-responsive" /></a>
+          <div class="card multiple-choice-question" data-question="1" data-value="a">
+            <div class="front">
+              <img src="https://unsplash.it/2000/2000/?random" class="img-responsive" />
+            </div>
+            <div class="back">
+              <h3>Wrong</h3>
+            </div>
+          </div>
         </div>
         <div class="col-xs-6 col-md-3">
-          <a href="#" class="question-choice"><img src="https://unsplash.it/2000/2000/?random" class="img-responsive" /></a>
+          <div class="card multiple-choice-question" data-question="1" data-value="b">
+            <div class="front">
+              <img src="https://unsplash.it/2000/2000/?random" class="img-responsive" />
+            </div>
+            <div class="back">
+              <h3>Wrong</h3>
+            </div>
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-6 col-md-3">
-          <a href="#" class="question-choice"><img src="https://unsplash.it/2000/2000/?random" class="img-responsive" /></a>
+          <div class="card multiple-choice-question" data-question="1" data-value="c">
+            <div class="front">
+              <img src="https://unsplash.it/2000/2000/?random" class="img-responsive" />
+            </div>
+            <div class="back">
+              <h3>Right</h3>
+            </div>
+          </div>
         </div>
         <div class="col-xs-6 col-md-3">
-          <a href="#" class="question-choice"><img src="https://unsplash.it/2000/2000/?random" class="img-responsive" /></a>
+          <div class="card multiple-choice-question" data-question="1" data-value="d">
+            <div class="front">
+              <img src="https://unsplash.it/2000/2000/?random" class="img-responsive" />
+            </div>
+            <div class="back">
+              <h3>Wrong</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-xs-12">
+          <button class="btn btn-primary btn-multiple-choice-submit" data-question="1">Submit</button>
         </div>
       </div>
       <div class="row">
@@ -296,6 +339,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="js/flip.js"></script>
 
     <script>
     $(function(){
@@ -327,6 +371,35 @@
           $('.seconds').html(seconds);
           $('.miliseconds').html(milliSeconds);
       }
+
+      $(".card").flip({
+        trigger: 'manual'
+      });
+
+      $('.multiple-choice-question').on('click',function(e){
+        e.preventDefault();
+        if ( !$(this).hasClass('answered') ){
+          var questionId = $(this).attr('data-question');
+          $('.multiple-choice-question[data-question='+questionId+']').removeClass('selected');
+          $(this).addClass('selected');
+          $('.btn-multiple-choice-submit[data-question='+questionId+']').attr('disabled',false);
+        }
+      });
+
+      $('.btn-multiple-choice-submit').on('click',function(e){
+        e.preventDefault();
+        var questionId = $(this).attr('data-question');
+        var selectedAnswer = $('.selected[data-question='+questionId+']');
+        var selectedValue = $(selectedAnswer).attr('data-value');
+        var answer = 'c';
+        selectedAnswer.flip(true);
+        if ( selectedValue !== answer ){
+          $('.multiple-choice-question[data-question='+questionId+'][data-value='+answer+']').flip(true);
+        }
+        $('.multiple-choice-question[data-question='+questionId+']').addClass('answered');
+        $('.btn-multiple-choice-submit[data-question='+questionId+']').attr('disabled',true);
+      });
+
 
       $('.circle').on('click',function(e){
         e.preventDefault();
