@@ -435,7 +435,7 @@
         e.preventDefault();
         var matchedItem = $(this);
         $(this).parent().removeClass('matched');
-        $(this).appendTo('.select-group');
+        $(this).appendTo('.select-group').addClass('selectable');
       })
 
       $.fn.animateAppendTo = function(sel, speed) {
